@@ -13,6 +13,9 @@ on:
     paths:
       - '**/*.py'
       - '**/*.ipynb'
+  schedule:
+    - cron: "0 0 * * SUN"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -50,7 +53,7 @@ jobs:
             git fetch origin "$BASE_REF"
             CHANGED_FILES=$(git diff --name-only "origin/$BASE_REF"...HEAD | grep -E '\.(py|ipynb)$' || echo "")
           else
-            # For push to main, check all files
+            # For push to main, scheduled runs, and manual dispatch: check all files
             CHANGED_FILES=$(find . -type f \( -name "*.py" -o -name "*.ipynb" \) -not -path "./.venv/*" -not -path "./venv/*" -not -path "*/build/*" -not -path "*/dist/*")
           fi
 
